@@ -1,0 +1,676 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>Weasyl HTTP API &mdash; Weasyl API 1.2 documentation</title>
+    
+    <link rel="stylesheet" href="_static/nature.css" type="text/css" />
+    <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+    
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    './',
+        VERSION:     '1.2',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true
+      };
+    </script>
+    <script type="text/javascript" src="_static/jquery.js"></script>
+    <script type="text/javascript" src="_static/underscore.js"></script>
+    <script type="text/javascript" src="_static/doctools.js"></script>
+    <link rel="top" title="Weasyl API 1.2 documentation" href="#" /> 
+  </head>
+  <body>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="http-routingtable.html" title="HTTP Routing Table"
+             >routing table</a> |</li>
+        <li><a href="#">Weasyl API 1.2 documentation</a> &raquo;</li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body">
+            
+  <div class="section" id="weasyl-http-api">
+<h1>Weasyl HTTP API<a class="headerlink" href="#weasyl-http-api" title="Permalink to this headline">¶</a></h1>
+<div class="section" id="basic-endpoints">
+<h2>Basic endpoints<a class="headerlink" href="#basic-endpoints" title="Permalink to this headline">¶</a></h2>
+<dl class="get">
+<dt id="get--api-version(.format)">
+<tt class="descname">GET </tt><tt class="descname">/api/version(.format)</tt><a class="headerlink" href="#get--api-version(.format)" title="Permalink to this definition">¶</a></dt>
+<dd><p>The current version of Weasyl, in some specified format. The format can be
+one of <tt class="docutils literal"><span class="pre">.json</span></tt> or <tt class="docutils literal"><span class="pre">.txt</span></tt>, or omitted for JSON by default. For example:</p>
+<div class="highlight-json"><div class="highlight"><pre><span class="p">{</span><span class="nt">&quot;short_sha&quot;</span><span class="p">:</span> <span class="s2">&quot;deadbeef&quot;</span><span class="p">}</span>
+</pre></div>
+</div>
+</dd></dl>
+
+<dl class="get">
+<dt id="get--api-whoami">
+<tt class="descname">GET </tt><tt class="descname">/api/whoami</tt><a class="headerlink" href="#get--api-whoami" title="Permalink to this definition">¶</a></dt>
+<dd><p>The currently logged-in user, as JSON. For example:</p>
+<div class="highlight-json"><div class="highlight"><pre><span class="p">{</span><span class="nt">&quot;login&quot;</span><span class="p">:</span> <span class="s2">&quot;weykent&quot;</span><span class="p">,</span> <span class="nt">&quot;userid&quot;</span><span class="p">:</span> <span class="mi">5756</span><span class="p">}</span>
+</pre></div>
+</div>
+<p>If there is no current user, the response will be a <a class="reference external" href="http://www.w3.org/Protocols/rfc2616/rfc2616-sec10.html#sec10.4.2">401 Unauthorized</a>.</p>
+</dd></dl>
+
+<dl class="get">
+<dt id="get--api-useravatar">
+<tt class="descname">GET </tt><tt class="descname">/api/useravatar</tt><a class="headerlink" href="#get--api-useravatar" title="Permalink to this definition">¶</a></dt>
+<dd><p>A user&#8217;s avatar.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name" colspan="2">Query Parameters:</th></tr>
+<tr class="field-odd field"><td>&nbsp;</td><td class="field-body"><ul class="first last simple">
+<li><strong>username</strong> &#8211; The user&#8217;s <a class="reference internal" href="#term-login-name"><em class="xref std std-term">login name</em></a>.</li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
+<p>The result will resemble:</p>
+<div class="highlight-json"><div class="highlight"><pre><span class="p">{</span><span class="nt">&quot;avatar&quot;</span><span class="p">:</span> <span class="s2">&quot;https://www.weasyl.com/static/user/66/42/8d/0a/3f/8c/5756/avatar.png&quot;</span><span class="p">}</span>
+</pre></div>
+</div>
+<p>Users without an avatar will get the default avatar icon back.</p>
+</dd></dl>
+
+<dl class="get">
+<dt id="get--api-submissions-frontpage">
+<tt class="descname">GET </tt><tt class="descname">/api/submissions/frontpage</tt><a class="headerlink" href="#get--api-submissions-frontpage" title="Permalink to this definition">¶</a></dt>
+<dd><p>A list of submissions from the front page, respecting the current user&#8217;s
+browsing settings.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name" colspan="2">Query Parameters:</th></tr>
+<tr class="field-odd field"><td>&nbsp;</td><td class="field-body"><ul class="first last simple">
+<li><strong>since</strong> &#8211; An <a class="reference internal" href="#term-iso-8601-timestamp"><em class="xref std std-term">ISO 8601 timestamp</em></a>. If specified, only submissions
+posted after this time will be returned.</li>
+<li><strong>count</strong> &#8211; If specified, no more than this many submissions will be
+returned.</li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
+<p>This will return at most 100 submissions. If <em>count</em> is more than 100, at
+most 100 submissions will be returned. It is possible to receive less than
+<em>count</em> submissions back if too many submissions are filtered by the user&#8217;s
+e.g. tag filters.</p>
+<p>The result will be a JSON array of <a class="reference internal" href="#submissions"><em>submission objects</em></a>.</p>
+</dd></dl>
+
+<dl class="get">
+<dt id="get--api-submissions-(submitid)-view">
+<tt class="descname">GET </tt><tt class="descname">/api/submissions/</tt><big>(</big><em>submitid</em><big>)</big><tt class="descname">/view</tt><a class="headerlink" href="#get--api-submissions-(submitid)-view" title="Permalink to this definition">¶</a></dt>
+<dd><p>View a particular submission by its <tt class="docutils literal"><span class="pre">submitid</span></tt>.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name" colspan="2">Query Parameters:</th></tr>
+<tr class="field-odd field"><td>&nbsp;</td><td class="field-body"><ul class="first last simple">
+<li><strong>anyway</strong> &#8211; If omitted, the current user&#8217;s tag filters may cause an error
+to be returned instead of a submission object. If specified as any
+non-empty string, tag filters will be ignored.</li>
+<li><strong>increment_views</strong> &#8211; If omitted, the view count will not be incremented
+for the specified submission. If specified as any non-empty string while
+<a class="reference internal" href="#authentication"><em>authenticated</em></a>, the view count may be increased.</li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
+<p>The result will be a JSON <a class="reference internal" href="#submissions"><em>submission object</em></a>.</p>
+</dd></dl>
+
+<dl class="get">
+<dt id="get--api-users-(login_name)-view">
+<tt class="descname">GET </tt><tt class="descname">/api/users/</tt><big>(</big><em>login_name</em><big>)</big><tt class="descname">/view</tt><a class="headerlink" href="#get--api-users-(login_name)-view" title="Permalink to this definition">¶</a></dt>
+<dd><p>Retrieve information about a user by <a class="reference internal" href="#term-login-name"><em class="xref std std-term">login name</em></a>.</p>
+<p>The result will be a JSON <a class="reference internal" href="#users"><em>user object</em></a>.</p>
+</dd></dl>
+
+<dl class="get">
+<dt id="get--api-users-(login_name)-gallery">
+<tt class="descname">GET </tt><tt class="descname">/api/users/</tt><big>(</big><em>login_name</em><big>)</big><tt class="descname">/gallery</tt><a class="headerlink" href="#get--api-users-(login_name)-gallery" title="Permalink to this definition">¶</a></dt>
+<dd><p>List a user&#8217;s gallery by <a class="reference internal" href="#term-login-name"><em class="xref std std-term">login name</em></a>.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name" colspan="2">Query Parameters:</th></tr>
+<tr class="field-odd field"><td>&nbsp;</td><td class="field-body"><ul class="first last simple">
+<li><strong>since</strong> &#8211; An <a class="reference internal" href="#term-iso-8601-timestamp"><em class="xref std std-term">ISO 8601 timestamp</em></a>. If specified, only submissions
+posted after this time will be returned.</li>
+<li><strong>count</strong> &#8211; If specified, no more than this many submissions will be
+returned.</li>
+<li><strong>folderid</strong> &#8211; If specified, only return submissions from the specified
+<tt class="docutils literal"><span class="pre">folderid</span></tt>.</li>
+<li><strong>backid</strong> &#8211; If specified, only return submissions with a <tt class="docutils literal"><span class="pre">submitid</span></tt>
+greater than the <tt class="docutils literal"><span class="pre">backid</span></tt>. This is used in pagination.</li>
+<li><strong>nextid</strong> &#8211; If specified, only return submissions with a <tt class="docutils literal"><span class="pre">submitid</span></tt>
+less than the <tt class="docutils literal"><span class="pre">nextid</span></tt>. This is used in pagination.</li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
+<p>This will return at most 100 submissions. If <em>count</em> is more than 100, at
+most 100 submissions will be returned.</p>
+<p>The result will be a JSON object with three keys: <em>submissions</em>, <em>backid</em>,
+and <em>nextid</em>. <em>submissions</em> will be a JSON array of <a class="reference internal" href="#submissions"><em>submission objects</em></a>. <em>backid</em> and <em>nexid</em> are used in <a class="reference internal" href="#pagination"><em>pagination</em></a>.</p>
+</dd></dl>
+
+<dl class="get">
+<dt id="get--api-messages-submissions">
+<tt class="descname">GET </tt><tt class="descname">/api/messages/submissions</tt><a class="headerlink" href="#get--api-messages-submissions" title="Permalink to this definition">¶</a></dt>
+<dd><p>List submissions in an <a class="reference internal" href="#authentication"><em>authenticated</em></a> user&#8217;s inbox.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name" colspan="2">Query Parameters:</th></tr>
+<tr class="field-odd field"><td>&nbsp;</td><td class="field-body"><ul class="first last simple">
+<li><strong>count</strong> &#8211; If specified, no more than this many submissions will be
+returned.</li>
+<li><strong>backtime</strong> &#8211; If specified, only return submissions with a <tt class="docutils literal"><span class="pre">unixtime</span></tt>
+greater than the <tt class="docutils literal"><span class="pre">backtime</span></tt>. This is used in pagination.</li>
+<li><strong>nexttime</strong> &#8211; If specified, only return submissions with a <tt class="docutils literal"><span class="pre">unixtime</span></tt>
+less than the <tt class="docutils literal"><span class="pre">nexttime</span></tt>. This is used in pagination.</li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
+<p>This will return at most 100 submissions. If <em>count</em> is more than 100, at
+most 100 submissions will be returned.</p>
+<p>The result will be a JSON object with three keys: <em>submissions</em>, <em>backtime</em>,
+and <em>nexttime</em>. <em>submissions</em> will be a JSON array of <a class="reference internal" href="#submissions"><em>submission
+objects</em></a>. <em>backtime</em> and <em>nextime</em> are used in
+<a class="reference internal" href="#pagination"><em>pagination</em></a>.</p>
+</dd></dl>
+
+<dl class="get">
+<dt id="get--api-messages-summary">
+<tt class="descname">GET </tt><tt class="descname">/api/messages/summary</tt><a class="headerlink" href="#get--api-messages-summary" title="Permalink to this definition">¶</a></dt>
+<dd><p>List a summary of notifications for an <a class="reference internal" href="#authentication"><em>authenticated</em></a>
+user. The result will be a JSON object resembling:</p>
+<div class="highlight-json"><div class="highlight"><pre><span class="p">{</span>
+    <span class="nt">&quot;comments&quot;</span><span class="p">:</span> <span class="mi">0</span><span class="p">,</span>
+    <span class="nt">&quot;journals&quot;</span><span class="p">:</span> <span class="mi">3</span><span class="p">,</span>
+    <span class="nt">&quot;notifications&quot;</span><span class="p">:</span> <span class="mi">1</span><span class="p">,</span>
+    <span class="nt">&quot;submissions&quot;</span><span class="p">:</span> <span class="mi">14</span><span class="p">,</span>
+    <span class="nt">&quot;unread_notes&quot;</span><span class="p">:</span> <span class="mi">0</span>
+<span class="p">}</span>
+</pre></div>
+</div>
+<div class="admonition note">
+<p class="first admonition-title">Note</p>
+<p class="last">The result of this API endpoint is cached. New information is available
+only every three minutes or when a note arrives.</p>
+</div>
+</dd></dl>
+
+</div>
+<div class="section" id="oauth2-endpoints">
+<h2>OAuth2 endpoints<a class="headerlink" href="#oauth2-endpoints" title="Permalink to this headline">¶</a></h2>
+<dl class="get">
+<dt id="get--api-oauth2-authorize">
+<tt class="descname">GET </tt><tt class="descname">/api/oauth2/authorize</tt><a class="headerlink" href="#get--api-oauth2-authorize" title="Permalink to this definition">¶</a></dt>
+<dd><p>The standard OAuth2 authorization endpoint. Currently only authorization
+code grants with callback URIs are supported.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name" colspan="2">Query Parameters:</th></tr>
+<tr class="field-odd field"><td>&nbsp;</td><td class="field-body"><ul class="first last simple">
+<li><strong>client_id</strong> &#8211; The client identifier issued to the consumer by Weasyl.</li>
+<li><strong>redirect_uri</strong> &#8211; The callback URI the consumer provided to Weasyl before
+the <em>client_id</em> was issued.</li>
+<li><strong>scope</strong> &#8211; Currently, only one scope is allowed: <tt class="docutils literal"><span class="pre">&quot;wholesite&quot;</span></tt></li>
+<li><strong>state</strong> &#8211; A random unguessable string.</li>
+<li><strong>response_type</strong> &#8211; Currently, only one response type is allowed:
+<tt class="docutils literal"><span class="pre">&quot;code&quot;</span></tt>.</li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
+<p>On a successful authorization, the user agent will be redirected to the
+<em>redirect_uri</em> with query parameters of <em>code</em> and <em>state</em>. <em>code</em> will be a
+random string used to retrieve the authorization code grant, and <em>state</em>
+will be the same <em>state</em> as was passed originally.</p>
+</dd></dl>
+
+<dl class="post">
+<dt id="post--api-oauth2-token">
+<tt class="descname">POST </tt><tt class="descname">/api/oauth2/token</tt><a class="headerlink" href="#post--api-oauth2-token" title="Permalink to this definition">¶</a></dt>
+<dd><p>The endpoint for fetching and refreshing OAuth2 tokens.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name" colspan="2">Form Parameters:</th></tr>
+<tr class="field-odd field"><td>&nbsp;</td><td class="field-body"><ul class="first last simple">
+<li><strong>client_secret</strong> &#8211; The client secret issued to the consumer by Weasyl.</li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
+<p>Other form parameters are described for authorization code grants at
+&lt;<a class="reference external" href="http://tools.ietf.org/html/rfc6749#section-4.1">http://tools.ietf.org/html/rfc6749#section-4.1</a>&gt; and for refreshing tokens
+at &lt;<a class="reference external" href="http://tools.ietf.org/html/rfc6749#section-6">http://tools.ietf.org/html/rfc6749#section-6</a>&gt;.</p>
+<div class="admonition note">
+<p class="first admonition-title">Note</p>
+<p class="last">Access tokens currently expire after an hour, to be sure to use the
+provided refresh token before then.</p>
+</div>
+</dd></dl>
+
+</div>
+<div class="section" id="submissions">
+<span id="id1"></span><h2>Submissions<a class="headerlink" href="#submissions" title="Permalink to this headline">¶</a></h2>
+<blockquote>
+<div><p>A basic submission object resembles:</p>
+<div class="highlight-json"><div class="highlight"><pre><span class="p">{</span>
+  <span class="nt">&quot;media&quot;</span><span class="p">:</span> <span class="p">{},</span>
+  <span class="nt">&quot;owner&quot;</span><span class="p">:</span> <span class="s2">&quot;Caffeinated-Owl&quot;</span><span class="p">,</span>
+  <span class="nt">&quot;owner_login&quot;</span><span class="p">:</span> <span class="s2">&quot;caffeinatedowl&quot;</span><span class="p">,</span>
+  <span class="nt">&quot;posted_at&quot;</span><span class="p">:</span> <span class="s2">&quot;2014-02-12T07:33:17Z&quot;</span>
+  <span class="s2">&quot;rating&quot;</span><span class="p">:</span> <span class="s2">&quot;general&quot;</span><span class="p">,</span>
+  <span class="nt">&quot;submitid&quot;</span><span class="p">:</span> <span class="mi">466821</span><span class="p">,</span>
+  <span class="nt">&quot;subtype&quot;</span><span class="p">:</span> <span class="s2">&quot;visual&quot;</span><span class="p">,</span>
+  <span class="nt">&quot;tags&quot;</span><span class="p">:</span> <span class="p">[</span>
+    <span class="s2">&quot;hunter&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;snake&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;pi&quot;</span>
+  <span class="p">],</span>
+  <span class="nt">&quot;title&quot;</span><span class="p">:</span> <span class="s2">&quot;Tiny Little Pi&quot;</span><span class="p">,</span>
+  <span class="nt">&quot;type&quot;</span><span class="p">:</span> <span class="s2">&quot;submission&quot;</span><span class="p">,</span>
+<span class="p">}</span>
+</pre></div>
+</div>
+<p>The <em>type</em> key will be one of <tt class="docutils literal"><span class="pre">&quot;submission&quot;</span></tt> or <tt class="docutils literal"><span class="pre">&quot;character&quot;</span></tt>.</p>
+<p>The <em>subtype</em> key for <tt class="docutils literal"><span class="pre">&quot;submission&quot;</span></tt> types will be one of <tt class="docutils literal"><span class="pre">&quot;visual&quot;</span></tt>,
+<tt class="docutils literal"><span class="pre">&quot;literary&quot;</span></tt>, or <tt class="docutils literal"><span class="pre">&quot;multimedia&quot;</span></tt>.</p>
+<p>The <em>rating</em> key will be one of <tt class="docutils literal"><span class="pre">&quot;general&quot;</span></tt>, <tt class="docutils literal"><span class="pre">&quot;moderate&quot;</span></tt>, <tt class="docutils literal"><span class="pre">&quot;mature&quot;</span></tt>,
+or <tt class="docutils literal"><span class="pre">&quot;explicit&quot;</span></tt>.</p>
+<p>The <em>media</em> key is the submission&#8217;s <a class="reference internal" href="#media"><em>media</em></a>.</p>
+<p>Slightly different keys are returned for the
+<a class="reference internal" href="#get--api-submissions-(submitid)-view" title="GET /api/submissions/(submitid)/view"><tt class="xref http http-get docutils literal"><span class="pre">GET</span> <span class="pre">/api/submissions/(submitid)/view</span></tt></a> endpoint:</p>
+<div class="highlight-json"><div class="highlight"><pre><span class="p">{</span>
+    <span class="nt">&quot;comments&quot;</span><span class="p">:</span> <span class="mi">0</span><span class="p">,</span>
+    <span class="nt">&quot;description&quot;</span><span class="p">:</span> <span class="s2">&quot;Itty bitty little snake hunter&quot;</span><span class="p">,</span>
+    <span class="nt">&quot;embedlink&quot;</span><span class="p">:</span> <span class="kc">null</span><span class="p">,</span>
+    <span class="nt">&quot;favorited&quot;</span><span class="p">:</span> <span class="kc">false</span><span class="p">,</span>
+    <span class="nt">&quot;favorites&quot;</span><span class="p">:</span> <span class="mi">3</span><span class="p">,</span>
+    <span class="nt">&quot;folder_name&quot;</span><span class="p">:</span> <span class="kc">null</span><span class="p">,</span>
+    <span class="nt">&quot;folderid&quot;</span><span class="p">:</span> <span class="kc">null</span><span class="p">,</span>
+    <span class="nt">&quot;friends_only&quot;</span><span class="p">:</span> <span class="kc">false</span><span class="p">,</span>
+    <span class="nt">&quot;owner&quot;</span><span class="p">:</span> <span class="s2">&quot;Caffeinated-Owl&quot;</span><span class="p">,</span>
+    <span class="nt">&quot;owner_login&quot;</span><span class="p">:</span> <span class="s2">&quot;caffeinatedowl&quot;</span><span class="p">,</span>
+    <span class="nt">&quot;owner_media&quot;</span><span class="p">:</span> <span class="p">{},</span>
+    <span class="nt">&quot;posted_at&quot;</span><span class="p">:</span> <span class="s2">&quot;2014-02-12T07:33:17Z&quot;</span><span class="p">,</span>
+    <span class="nt">&quot;rating&quot;</span><span class="p">:</span> <span class="s2">&quot;general&quot;</span><span class="p">,</span>
+    <span class="nt">&quot;media&quot;</span><span class="p">:</span> <span class="p">{},</span>
+    <span class="nt">&quot;submitid&quot;</span><span class="p">:</span> <span class="mi">466821</span><span class="p">,</span>
+    <span class="nt">&quot;subtype&quot;</span><span class="p">:</span> <span class="s2">&quot;visual&quot;</span><span class="p">,</span>
+    <span class="nt">&quot;tags&quot;</span><span class="p">:</span> <span class="p">[</span>
+        <span class="s2">&quot;hunter&quot;</span><span class="p">,</span>
+        <span class="s2">&quot;pi&quot;</span><span class="p">,</span>
+        <span class="s2">&quot;snake&quot;</span>
+    <span class="p">],</span>
+    <span class="nt">&quot;title&quot;</span><span class="p">:</span> <span class="s2">&quot;Tiny Little Pi&quot;</span><span class="p">,</span>
+    <span class="nt">&quot;type&quot;</span><span class="p">:</span> <span class="s2">&quot;submission&quot;</span><span class="p">,</span>
+    <span class="nt">&quot;views&quot;</span><span class="p">:</span> <span class="mi">6</span>
+<span class="p">}</span>
+</pre></div>
+</div>
+<p>The <em>media</em> key is the <a class="reference internal" href="#media"><em>media</em></a> for the submission itself,
+while the <em>owner_media</em> key is the <a class="reference internal" href="#media"><em>media</em></a> for the owner of the
+submission.</p>
+<p>The <em>embedlink</em> key will be <tt class="docutils literal"><span class="pre">null</span></tt> for <tt class="docutils literal"><span class="pre">&quot;visual&quot;</span></tt> type submissions and
+potentially a URL for other submission types.</p>
+<p>The <em>description</em> key is the HTML-rendered description of the submission.</p>
+<p>The <em>favorited</em> key indicates whether or not the current user has favorited
+the submission.</p>
+</div></blockquote>
+</div>
+<div class="section" id="users">
+<span id="id2"></span><h2>Users<a class="headerlink" href="#users" title="Permalink to this headline">¶</a></h2>
+<p>A user object contains many keys. Some of these keys include:</p>
+<blockquote>
+<div><dl class="docutils">
+<dt><tt class="docutils literal"><span class="pre">media</span></tt></dt>
+<dd>The <a class="reference internal" href="#media"><em>media</em></a> of the specified user&#8217;s avatar and banner.</dd>
+<dt><tt class="docutils literal"><span class="pre">profile_text</span></tt></dt>
+<dd>The rendered HTML of the specified user&#8217;s description.</dd>
+<dt><tt class="docutils literal"><span class="pre">recent_submissions</span></tt></dt>
+<dd>An array of <a class="reference internal" href="#submissions"><em>submission objects</em></a>.</dd>
+<dt><tt class="docutils literal"><span class="pre">recent_type</span></tt></dt>
+<dd>What kind of submissions are in the <tt class="docutils literal"><span class="pre">recent_submissions</span></tt> array. Can
+be one of <tt class="docutils literal"><span class="pre">submissions</span></tt>, <tt class="docutils literal"><span class="pre">characters</span></tt>, or <tt class="docutils literal"><span class="pre">collections</span></tt>.</dd>
+<dt><tt class="docutils literal"><span class="pre">relationship</span></tt></dt>
+<dd><tt class="docutils literal"><span class="pre">null</span></tt> if this is an unauthenticated request or an object
+representing aspects of the relationship between the current user and
+the specified user.</dd>
+<dt><tt class="docutils literal"><span class="pre">show_favorites_bar</span></tt></dt>
+<dd>Whether the specified user&#8217;s favorites are shown as icons at the top
+of the profile page.</dd>
+<dt><tt class="docutils literal"><span class="pre">show_favorites_tab</span></tt></dt>
+<dd>Whether the specified user&#8217;s favorites should be shown at all.</dd>
+<dt><tt class="docutils literal"><span class="pre">statistics</span></tt></dt>
+<dd><tt class="docutils literal"><span class="pre">null</span></tt> if the specified user doesn&#8217;t allow statistics to be shown or
+an object of statistics about the specified user.</dd>
+</dl>
+</div></blockquote>
+<p>A user object resembles:</p>
+<div class="highlight-json"><div class="highlight"><pre><span class="p">{</span>
+    <span class="nt">&quot;banned&quot;</span><span class="p">:</span> <span class="kc">false</span><span class="p">,</span>
+    <span class="nt">&quot;catchphrase&quot;</span><span class="p">:</span> <span class="s2">&quot;&quot;</span><span class="p">,</span>
+    <span class="nt">&quot;commission_info&quot;</span><span class="p">:</span> <span class="p">{</span>
+        <span class="nt">&quot;commissions&quot;</span><span class="p">:</span> <span class="kc">null</span><span class="p">,</span>
+        <span class="nt">&quot;details&quot;</span><span class="p">:</span> <span class="s2">&quot;&amp;lt;&quot;</span><span class="p">,</span>
+        <span class="nt">&quot;price_classes&quot;</span><span class="p">:</span> <span class="kc">null</span><span class="p">,</span>
+        <span class="nt">&quot;requests&quot;</span><span class="p">:</span> <span class="kc">null</span><span class="p">,</span>
+        <span class="nt">&quot;trades&quot;</span><span class="p">:</span> <span class="kc">null</span>
+    <span class="p">},</span>
+    <span class="nt">&quot;created_at&quot;</span><span class="p">:</span> <span class="s2">&quot;2012-11-03T17:01:37Z&quot;</span><span class="p">,</span>
+    <span class="nt">&quot;featured_submission&quot;</span><span class="p">:</span> <span class="kc">null</span><span class="p">,</span>
+    <span class="nt">&quot;folders&quot;</span><span class="p">:</span> <span class="p">[],</span>
+    <span class="nt">&quot;full_name&quot;</span><span class="p">:</span> <span class="s2">&quot;weyk\u00ebnt&quot;</span><span class="p">,</span>
+    <span class="nt">&quot;login_name&quot;</span><span class="p">:</span> <span class="s2">&quot;weykent&quot;</span><span class="p">,</span>
+    <span class="nt">&quot;media&quot;</span><span class="p">:</span> <span class="p">{</span>
+        <span class="nt">&quot;avatar&quot;</span><span class="p">:</span> <span class="p">[</span>
+            <span class="p">{</span>
+                <span class="nt">&quot;mediaid&quot;</span><span class="p">:</span> <span class="mi">937444</span><span class="p">,</span>
+                <span class="nt">&quot;url&quot;</span><span class="p">:</span> <span class="s2">&quot;https://www.weasyl.com/static/user/66/42/8d/0a/3f/8c//5756/avatar.png&quot;</span>
+            <span class="p">}</span>
+        <span class="p">],</span>
+        <span class="nt">&quot;banner&quot;</span><span class="p">:</span> <span class="p">[</span>
+            <span class="p">{</span>
+                <span class="nt">&quot;mediaid&quot;</span><span class="p">:</span> <span class="mi">937443</span><span class="p">,</span>
+                <span class="nt">&quot;url&quot;</span><span class="p">:</span> <span class="s2">&quot;https://www.weasyl.com/static/user/66/42/8d/0a/3f/8c//5756/banner.gif&quot;</span>
+            <span class="p">}</span>
+        <span class="p">]</span>
+    <span class="p">},</span>
+    <span class="nt">&quot;profile_text&quot;</span><span class="p">:</span> <span class="s2">&quot;&lt;p&gt;yo. I do weasyl coding and shit.&lt;/p&gt;&lt;p&gt;&amp;#128572;&lt;/p&gt;&quot;</span><span class="p">,</span>
+    <span class="nt">&quot;recent_submissions&quot;</span><span class="p">:</span> <span class="p">[],</span>
+    <span class="nt">&quot;recent_type&quot;</span><span class="p">:</span> <span class="s2">&quot;collections&quot;</span><span class="p">,</span>
+    <span class="nt">&quot;relationship&quot;</span><span class="p">:</span> <span class="kc">null</span><span class="p">,</span>
+    <span class="nt">&quot;show_favorites_bar&quot;</span><span class="p">:</span> <span class="kc">false</span><span class="p">,</span>
+    <span class="nt">&quot;show_favorites_tab&quot;</span><span class="p">:</span> <span class="kc">false</span><span class="p">,</span>
+    <span class="nt">&quot;statistics&quot;</span><span class="p">:</span> <span class="p">{</span>
+        <span class="nt">&quot;faves_received&quot;</span><span class="p">:</span> <span class="mi">0</span><span class="p">,</span>
+        <span class="nt">&quot;faves_sent&quot;</span><span class="p">:</span> <span class="mi">2</span><span class="p">,</span>
+        <span class="nt">&quot;followed&quot;</span><span class="p">:</span> <span class="mi">23</span><span class="p">,</span>
+        <span class="nt">&quot;following&quot;</span><span class="p">:</span> <span class="mi">56</span><span class="p">,</span>
+        <span class="nt">&quot;journals&quot;</span><span class="p">:</span> <span class="mi">0</span><span class="p">,</span>
+        <span class="nt">&quot;page_views&quot;</span><span class="p">:</span> <span class="mi">16354</span><span class="p">,</span>
+        <span class="nt">&quot;submissions&quot;</span><span class="p">:</span> <span class="mi">0</span><span class="p">,</span>
+        <span class="nt">&quot;submit_views&quot;</span><span class="p">:</span> <span class="mi">0</span>
+    <span class="p">},</span>
+    <span class="nt">&quot;stream_text&quot;</span><span class="p">:</span> <span class="s2">&quot;&quot;</span><span class="p">,</span>
+    <span class="nt">&quot;stream_url&quot;</span><span class="p">:</span> <span class="s2">&quot;&quot;</span><span class="p">,</span>
+    <span class="nt">&quot;streaming_status&quot;</span><span class="p">:</span> <span class="s2">&quot;stopped&quot;</span><span class="p">,</span>
+    <span class="nt">&quot;suspended&quot;</span><span class="p">:</span> <span class="kc">false</span><span class="p">,</span>
+    <span class="nt">&quot;user_info&quot;</span><span class="p">:</span> <span class="p">{</span>
+        <span class="nt">&quot;age&quot;</span><span class="p">:</span> <span class="kc">null</span><span class="p">,</span>
+        <span class="nt">&quot;aim&quot;</span><span class="p">:</span> <span class="s2">&quot;&quot;</span><span class="p">,</span>
+        <span class="nt">&quot;facebook&quot;</span><span class="p">:</span> <span class="s2">&quot;&quot;</span><span class="p">,</span>
+        <span class="nt">&quot;foursquare&quot;</span><span class="p">:</span> <span class="s2">&quot;&quot;</span><span class="p">,</span>
+        <span class="nt">&quot;gender&quot;</span><span class="p">:</span> <span class="s2">&quot;h4x0r&quot;</span><span class="p">,</span>
+        <span class="nt">&quot;googleplus&quot;</span><span class="p">:</span> <span class="s2">&quot;&quot;</span><span class="p">,</span>
+        <span class="nt">&quot;icq&quot;</span><span class="p">:</span> <span class="s2">&quot;&quot;</span><span class="p">,</span>
+        <span class="nt">&quot;location&quot;</span><span class="p">:</span> <span class="s2">&quot;seattle, wa&quot;</span><span class="p">,</span>
+        <span class="nt">&quot;msn&quot;</span><span class="p">:</span> <span class="s2">&quot;&quot;</span><span class="p">,</span>
+        <span class="nt">&quot;myspace&quot;</span><span class="p">:</span> <span class="s2">&quot;&quot;</span><span class="p">,</span>
+        <span class="nt">&quot;psn&quot;</span><span class="p">:</span> <span class="s2">&quot;&quot;</span><span class="p">,</span>
+        <span class="nt">&quot;reddit&quot;</span><span class="p">:</span> <span class="s2">&quot;&quot;</span><span class="p">,</span>
+        <span class="nt">&quot;skype&quot;</span><span class="p">:</span> <span class="s2">&quot;&quot;</span><span class="p">,</span>
+        <span class="nt">&quot;steam&quot;</span><span class="p">:</span> <span class="s2">&quot;&quot;</span><span class="p">,</span>
+        <span class="nt">&quot;tumblr&quot;</span><span class="p">:</span> <span class="s2">&quot;&quot;</span><span class="p">,</span>
+        <span class="nt">&quot;twitter&quot;</span><span class="p">:</span> <span class="s2">&quot;&quot;</span><span class="p">,</span>
+        <span class="nt">&quot;xboxlive&quot;</span><span class="p">:</span> <span class="s2">&quot;&quot;</span><span class="p">,</span>
+        <span class="nt">&quot;yahoo&quot;</span><span class="p">:</span> <span class="s2">&quot;&quot;</span><span class="p">,</span>
+        <span class="nt">&quot;youtube&quot;</span><span class="p">:</span> <span class="s2">&quot;&quot;</span>
+    <span class="p">},</span>
+    <span class="nt">&quot;username&quot;</span><span class="p">:</span> <span class="s2">&quot;weykent&quot;</span>
+<span class="p">}</span>
+</pre></div>
+</div>
+</div>
+<div class="section" id="media-keys">
+<span id="media"></span><h2>Media keys<a class="headerlink" href="#media-keys" title="Permalink to this headline">¶</a></h2>
+<p><em>media</em> keys in Weasyl API responses take the form of a JSON object mapping
+descriptive names to media file objects.</p>
+<p>The media file objects will have at least two keys: <em>url</em>, and <em>mediaid</em>. The
+<em>mediaid</em> is a unique identifier which unambiguously refers to a particular
+file stored by Weasyl. The <em>url</em> is one possible URL where the file can be
+downloaded. There can be multiple possible <em>url</em>s for a given <em>mediaid</em>. A
+<em>mediaid</em> can also be <tt class="docutils literal"><span class="pre">null</span></tt> to indicate the <em>url</em> is already unambiguous.</p>
+<p>A media file object may also have another key: <em>links</em>. The <em>links</em> key is
+itself a media key, and allows media files to be linked to other media files.
+Currently, the only kind of link is <tt class="docutils literal"><span class="pre">&quot;cover&quot;</span></tt>, which links a media file to
+its <a class="reference internal" href="#term-cover-image"><em class="xref std std-term">cover image</em></a>.</p>
+<p>For submissions, the possible descriptive names are <tt class="docutils literal"><span class="pre">&quot;submission&quot;</span></tt> for the
+original file uploaded by the user, <tt class="docutils literal"><span class="pre">&quot;cover&quot;</span></tt> for the submission&#8217;s
+<a class="reference internal" href="#term-cover-image"><em class="xref std std-term">cover image</em></a>, and <tt class="docutils literal"><span class="pre">&quot;thumbnail&quot;</span></tt> for the submission&#8217;s thumbnail. The
+<tt class="docutils literal"><span class="pre">&quot;submission&quot;</span></tt> and <tt class="docutils literal"><span class="pre">&quot;cover&quot;</span></tt> names are optional for a submission, while the
+<tt class="docutils literal"><span class="pre">&quot;thumbnail&quot;</span></tt> name will always exist.</p>
+<p>For users, the possible descriptive names are <tt class="docutils literal"><span class="pre">&quot;avatar&quot;</span></tt> for the user&#8217;s
+avatar and <tt class="docutils literal"><span class="pre">&quot;banner&quot;</span></tt> for the user&#8217;s banner. <tt class="docutils literal"><span class="pre">&quot;banner&quot;</span></tt> is optional while
+<tt class="docutils literal"><span class="pre">&quot;avatar&quot;</span></tt> will always exist.</p>
+<p>Here is an example of the media for a visual submission:</p>
+<div class="highlight-json"><div class="highlight"><pre><span class="p">{</span>
+  <span class="nt">&quot;submission&quot;</span><span class="p">:</span> <span class="p">[</span>
+    <span class="p">{</span>
+      <span class="nt">&quot;links&quot;</span><span class="p">:</span> <span class="p">{</span>
+        <span class="nt">&quot;cover&quot;</span><span class="p">:</span> <span class="p">[</span>
+          <span class="p">{</span>
+            <span class="nt">&quot;mediaid&quot;</span><span class="p">:</span> <span class="mi">1651999</span><span class="p">,</span>
+            <span class="nt">&quot;url&quot;</span><span class="p">:</span> <span class="s2">&quot;https://www.weasyl.com/static/media/...&quot;</span>
+          <span class="p">}</span>
+        <span class="p">]</span>
+      <span class="p">},</span>
+      <span class="nt">&quot;mediaid&quot;</span><span class="p">:</span> <span class="mi">1651999</span><span class="p">,</span>
+      <span class="nt">&quot;url&quot;</span><span class="p">:</span> <span class="s2">&quot;https://www.weasyl.com/static/media/...&quot;</span>
+    <span class="p">}</span>
+  <span class="p">],</span>
+  <span class="nt">&quot;thumbnail&quot;</span><span class="p">:</span> <span class="p">[</span>
+    <span class="p">{</span>
+      <span class="nt">&quot;mediaid&quot;</span><span class="p">:</span> <span class="mi">1652001</span><span class="p">,</span>
+      <span class="nt">&quot;url&quot;</span><span class="p">:</span> <span class="s2">&quot;https://www.weasyl.com/static/media/...&quot;</span>
+    <span class="p">}</span>
+  <span class="p">],</span>
+  <span class="nt">&quot;cover&quot;</span><span class="p">:</span> <span class="p">[</span>
+    <span class="p">{</span>
+      <span class="nt">&quot;links&quot;</span><span class="p">:</span> <span class="p">{</span>
+        <span class="nt">&quot;cover&quot;</span><span class="p">:</span> <span class="p">[</span>
+          <span class="p">{</span>
+            <span class="nt">&quot;mediaid&quot;</span><span class="p">:</span> <span class="mi">1651999</span><span class="p">,</span>
+            <span class="nt">&quot;url&quot;</span><span class="p">:</span> <span class="s2">&quot;https://www.weasyl.com/static/media/...&quot;</span>
+          <span class="p">}</span>
+        <span class="p">]</span>
+      <span class="p">},</span>
+      <span class="nt">&quot;mediaid&quot;</span><span class="p">:</span> <span class="mi">1651999</span><span class="p">,</span>
+      <span class="nt">&quot;url&quot;</span><span class="p">:</span> <span class="s2">&quot;https://www.weasyl.com/static/media/...&quot;</span>
+    <span class="p">}</span>
+  <span class="p">]</span>
+<span class="p">}</span>
+</pre></div>
+</div>
+</div>
+<div class="section" id="pagination">
+<span id="id3"></span><h2>Pagination<a class="headerlink" href="#pagination" title="Permalink to this headline">¶</a></h2>
+<p>Pagination is done through <em>backid</em> and <em>nextid</em> (or, in some cases, <em>backtime</em>
+and <em>nexttime</em>) response keys and request query parameters. Paginated API
+endpoints will return JSON objects with <em>backid</em> and <em>nextid</em> keys to indicate
+how to find the previous and next pages of results.</p>
+<p>If <em>nextid</em> is not <tt class="docutils literal"><span class="pre">null</span></tt>, there is a next page accessible by specifying that
+<em>nextid</em> as a query parameter, keeping all other query parameters the same.
+Similarly, if <em>backid</em> is not <tt class="docutils literal"><span class="pre">null</span></tt>, there is a previous page accessible by
+specifying that <em>backid</em> as a query parameter.</p>
+</div>
+<div class="section" id="authentication">
+<span id="id4"></span><h2>Authentication<a class="headerlink" href="#authentication" title="Permalink to this headline">¶</a></h2>
+<p>Authentication can be done in one of two ways: a Weasyl API key, or an OAuth2
+bearer token.</p>
+<p>Weasyl API keys are managed at &lt;<a class="reference external" href="https://www.weasyl.com/control/apikeys">https://www.weasyl.com/control/apikeys</a>&gt;, and
+are extremely simple to use. To authenticate a request, set the
+<tt class="docutils literal"><span class="pre">X-Weasyl-API-Key</span></tt> header to the value of an API key, and the user agent will
+be authenticated as the user who created the key.</p>
+<p>To authenticate a request with an OAuth2 bearer token, pass an <tt class="docutils literal"><span class="pre">Authorization:</span>
+<span class="pre">Bearer</span></tt> header along with the token, as described in
+&lt;<a class="reference external" href="http://tools.ietf.org/html/draft-ietf-oauth-v2-bearer-20#section-2.1">http://tools.ietf.org/html/draft-ietf-oauth-v2-bearer-20#section-2.1</a>&gt;.</p>
+</div>
+<div class="section" id="errors">
+<h2>Errors<a class="headerlink" href="#errors" title="Permalink to this headline">¶</a></h2>
+<p>At the moment, these are the non-<a class="reference external" href="http://www.w3.org/Protocols/rfc2616/rfc2616-sec10.html#sec10.2.1">200 OK</a> statuses potentially
+emitted by the Weasyl API:</p>
+<ul class="simple">
+<li><a class="reference external" href="http://www.w3.org/Protocols/rfc2616/rfc2616-sec10.html#sec10.4.2">401 Unauthorized</a>. This is emitted for resources which require an
+<a class="reference internal" href="#authentication"><em>authenticated</em></a> user if no authorization is provided,
+or if the provided authorization is invalid.</li>
+<li><a class="reference external" href="http://www.w3.org/Protocols/rfc2616/rfc2616-sec10.html#sec10.4.4">403 Forbidden</a>. This is emitted in the case of an expected error.
+That is, Weasyl was able to process your request, but is unable to return the
+requested entity for some reason.</li>
+<li><a class="reference external" href="http://www.w3.org/Protocols/rfc2616/rfc2616-sec10.html#sec10.4.5">404 Not Found</a>. This is emitted if a URL is requested which doesn&#8217;t
+have matching data. For example, a request to
+<a class="reference internal" href="#get--api-users-(login_name)-gallery" title="GET /api/users/(login_name)/gallery"><tt class="xref http http-get docutils literal"><span class="pre">GET</span> <span class="pre">/api/users/(login_name)/gallery</span></tt></a> for a <a class="reference internal" href="#term-login-name"><em class="xref std std-term">login name</em></a> which
+doesn&#8217;t exist.</li>
+<li><a class="reference external" href="http://www.w3.org/Protocols/rfc2616/rfc2616-sec10.html#sec10.4.23">422 Unprocessable Entity</a>. This is emitted if a parameter&#8217;s value is unparsable
+or invalid. For example, if a non-numeric value is specified for a parameter
+requiring a numeric value.</li>
+<li><a class="reference external" href="http://www.w3.org/Protocols/rfc2616/rfc2616-sec10.html#sec10.5.1">500 Internal Server Error</a>. This is emitted in the case of an unexpected error.
+That is, Weasyl was unable to process your request.</li>
+</ul>
+<p>In addition to sending a non-<a class="reference external" href="http://www.w3.org/Protocols/rfc2616/rfc2616-sec10.html#sec10.2.1">200 OK</a> response, errors are
+signaled by returning a JSON object with an <em>error</em> key. The value of this key
+will be an object containing either a <em>code</em> key, a <em>name</em> key, or neither. An
+object with a <em>code</em> or <em>name</em> key will unambiguously specify the problem
+encountered. An object with neither key indicates that an unexpected error was
+encountered.</p>
+<p>An error response resembles the following:</p>
+<div class="highlight-json"><div class="highlight"><pre><span class="p">{</span>
+  <span class="nt">&quot;error&quot;</span><span class="p">:</span> <span class="p">{</span>
+    <span class="nt">&quot;name&quot;</span><span class="p">:</span> <span class="s2">&quot;RatingExceeded&quot;</span>
+  <span class="p">}</span>
+<span class="p">}</span>
+</pre></div>
+</div>
+<div class="section" id="oauth2-errors">
+<h3>OAuth2 errors<a class="headerlink" href="#oauth2-errors" title="Permalink to this headline">¶</a></h3>
+<p>If a bearer token has expired, the <a class="reference external" href="http://www.w3.org/Protocols/rfc2616/rfc2616-sec14.html#sec14.47">WWW-Authenticate</a> header in
+the response will include <tt class="docutils literal"><span class="pre">error=&quot;invalid_token&quot;</span></tt>.</p>
+</div>
+</div>
+</div>
+<div class="section" id="glossary">
+<h1>Glossary<a class="headerlink" href="#glossary" title="Permalink to this headline">¶</a></h1>
+<dl class="glossary docutils">
+<dt id="term-cover-image">cover image</dt>
+<dd>The image displayed on the submission page, which may be smaller than the
+actual submission file. Cover images will be no larger than 1024 pixels
+by 3000 pixels.</dd>
+<dt id="term-iso-8601-timestamp">ISO 8601 timestamp</dt>
+<dd>A string representing a particular moment in time. Weasyl requires
+exactly one of the formats described by ISO 8601:
+<tt class="docutils literal"><span class="pre">YYYY-MM-DDTHH:MM:SSZ</span></tt>. For example, <tt class="docutils literal"><span class="pre">2014-02-12T17:00:00Z</span></tt>. As this
+includes a trailing <tt class="docutils literal"><span class="pre">Z</span></tt>, the time is required to be in UTC.</dd>
+<dt id="term-login-name">login name</dt>
+<dd>A user&#8217;s username, lowercase, and omitting all non-alphanumeric,
+non-ASCII characters.</dd>
+</dl>
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar">
+        <div class="sphinxsidebarwrapper">
+  <h3><a href="#">Table Of Contents</a></h3>
+  <ul>
+<li><a class="reference internal" href="#">Weasyl HTTP API</a><ul>
+<li><a class="reference internal" href="#basic-endpoints">Basic endpoints</a></li>
+<li><a class="reference internal" href="#oauth2-endpoints">OAuth2 endpoints</a></li>
+<li><a class="reference internal" href="#submissions">Submissions</a></li>
+<li><a class="reference internal" href="#users">Users</a></li>
+<li><a class="reference internal" href="#media-keys">Media keys</a></li>
+<li><a class="reference internal" href="#pagination">Pagination</a></li>
+<li><a class="reference internal" href="#authentication">Authentication</a></li>
+<li><a class="reference internal" href="#errors">Errors</a><ul>
+<li><a class="reference internal" href="#oauth2-errors">OAuth2 errors</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li><a class="reference internal" href="#glossary">Glossary</a></li>
+</ul>
+
+  <h3>This Page</h3>
+  <ul class="this-page-menu">
+    <li><a href="_sources/index.txt"
+           rel="nofollow">Show Source</a></li>
+    <li><a href="https://github.com/Weasyl/weasyl-apidocs/blob/master/source/index.rst"
+           rel="nofollow">Show on GitHub</a></li>
+    <li><a href="https://github.com/Weasyl/weasyl-apidocs/edit/master/source/index.rst"
+           rel="nofollow">Edit on GitHub</a></li>
+  </ul>
+<div id="searchbox" style="display: none">
+  <h3>Quick search</h3>
+    <form class="search" action="search.html" method="get">
+      <input type="text" name="q" />
+      <input type="submit" value="Go" />
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+    <p class="searchtip" style="font-size: 90%">
+    Enter search terms or a module, class or function name.
+    </p>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="http-routingtable.html" title="HTTP Routing Table"
+             >routing table</a> |</li>
+        <li><a href="#">Weasyl API 1.2 documentation</a> &raquo;</li> 
+      </ul>
+    </div>
+    <div class="footer">
+        &copy; Copyright 2014, weykent.
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.2.3.
+    </div>
+  </body>
+</html>
