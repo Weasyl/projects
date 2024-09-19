@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html lang="en">
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+
+<title>Bot etiquette for Weasyl</title>
+
+<style>
+body {
+	font: 1em/1.5 sans-serif;
+	max-width: 50em;
+}
+
+ul {
+	padding-left: 1em;
+}
+
+h4 {
+	margin-bottom: 8px;
+}
+
+blockquote {
+	background-color: #eee;
+	color: black;
+	border-radius: 4px;
+	margin: 0;
+	padding: 8px;
+}
+
+samp {
+	font: inherit;
+}
+</style>
+
+<p>When sending automated requests to Weasyl (whether on behalf of a user or not), to help us keep track of and manage malicious and unwanted traffic, we’d appreciate it if you:
+
+<ul>
+<li>
+	<h3>Use an identifying <code>User-Agent</code> header that doesn’t imitate a browser.</h3>
+
+	<h4>Yes</h4>
+	<blockquote><samp>Example-App/1.0 (+https://domain.example/page-with-info-about-your-app)</samp></blockquote>
+
+	<h4>No</h4>
+	<blockquote><samp>Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:128.0) Gecko/20100101 Firefox/128.0</samp></blockquote>
+
+	<p>Even if your request comes from a real browser, e.g. from an extension or in headless mode, please take the time to extend the <code>User-Agent</code> header to distinguish your app or bot if technically possible.</p>
+
+<li>
+	<h3>Send requests at a reasonable rate.</h3>
+
+	<p>At most one request per second, say, if sending a large batch of requests. (Small groups of requests as a result of user action don’t need to be rate-limited.) Retry failed requests with exponential backoff.</p>
+</ul>
+
+<p>For any questions/concerns/requests, see the Support section at the end of <a href="https://www.weasyl.com/">any Weasyl page</a>.
